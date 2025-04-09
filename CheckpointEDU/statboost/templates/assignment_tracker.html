@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>📚 Assignment Tracker</h2>
+
+<div class="section">
+    <h3>📝 Add New Assignment</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <label>Title:</label>
+        <input type="text" name="title" required>
+        <label>Description:</label>
+        <textarea name="description" required></textarea>
+        <label>Due Date:</label>
+        <input type="date" name="due_date" required>
+        <button class="btn">Add Assignment</button>
+    </form>
+</div>
+
+<div class="section">
+    <h3>📑 Your Assignments</h3>
+    {% for assignment in assignments %}
+        <div class="card">
+            <h4>{{ assignment.title }}</h4>
+            <p>{{ assignment.description }}</p>
+            <small>Due: {{ assignment.due_date }}</small>
+            <br>
+            <a href="{% url 'update_assignment' assignment.id %}" class="btn">Update</a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>📅 Planner</h2>
+
+<div class="section">
+    <h3>📅 Add New Task</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <label>Date:</label>
+        <input type="date" name="date" required>
+        <label>Task:</label>
+        <input type="text" name="task" required>
+        <button class="btn">Add Task</button>
+    </form>
+</div>
+
+<div class="section">
+    <h3>🗓 Your Tasks</h3>
+    {% for task in tasks %}
+        <div class="card">{{ task.task }} <br><small>{{ task.date }}</small></div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>🔐 Login</h2>
+{% if error %}
+    <p style="color:red;">{{ error }}</p>
+{% endif %}
+<form method="POST">
+    {% csrf_token %}
+    <label>Username:</label>
+    <input type="text" name="username" required>
+    <label>Password:</label>
+    <input type="password" name="password" required>
+    <label>Role:</label>
+    <select name="role">
+        <option value="Student">Student</option>
+        <option value="Lecturer">Lecturer</option>
+    </select>
+    <button class="btn" type="submit">Log In</button>
+</form>
+{% endblock %}

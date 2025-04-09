@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Header with Go to Planner and Logout button -->
+<div class="header">
+    <a href="{% url 'planner' %}">
+        <button class="btn-go-planner">Go to Planner</button>
+    </a>
+    {% if user.is_authenticated %}
+   
+    {% endif %}
+</div>
+
+<h2>🎓 Welcome, Lecturer</h2>
+
+<!-- Post Announcement Section -->
+<div class="section">
+    <h3>📢 Post Announcement</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <textarea name="announcement" placeholder="What's new for students?" rows="4"></textarea>
+        <button class="btn">Post</button>
+    </form>
+</div>
+
+<!-- Recent Announcements Section -->
+<div class="section">
+    <h3>📝 Recent Announcements</h3>
+    {% for announcement in announcements %}
+        <div class="card">
+            📣 {{ announcement.content }} 
+            <br><small>{{ announcement.date }}</small>
+            <!-- Edit and Delete buttons for the lecturer -->
+            <a href="{% url 'update_announcement' announcement.id %}" class="btn">Edit</a>
+            <form method="POST" action="{% url 'delete_announcement' announcement.id %}">
+                {% csrf_token %}
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Student Mood Summary Section -->
+<div class="section">
+    <h3>📊 Student Mood Summary</h3>
+    {% for mood in moods %}
+        <div class="card">
+            🗓 {{ mood.date|date:"D H:i" }} - {{ mood.mood }}
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Assignment Section -->
+<div class="section">
+    <h3>📚 Assignments</h3>
+    <form method="POST" action="/assignments/create/">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Assignment Title" required>
+        <textarea name="description" placeholder="Assignment Details" rows="4" required></textarea>
+        <input type="date" name="due_date" required>
+        <button class="btn">Create Assignment</button>
+    </form>
+
+    <h4>Assigned Tasks</h4>
+    {% for assignment in assignments %}
+        <div class="card">
+            <h5>{{ assignment.title }}</h5>
+            <p>{{ assignment.description }}</p>
+            <small>Due: {{ assignment.due_date }}</small>
+            <form method="POST" action="{% url 'delete_assignment' assignment.id %}">
+                {% csrf_token %}
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

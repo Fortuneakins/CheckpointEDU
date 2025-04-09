@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="header">
+    <a href="{% url 'planner' %}">
+        <button class="btn-go-planner">Go to Planner</button>
+    </a>
+    {% if user.is_authenticated %}
+   
+    {% endif %}
+</div>
+
+<h2>📚 Welcome, Student</h2>
+
+<!-- Weekly Timetable -->
+<div class="section">
+    <h3>📅 Weekly Timetable</h3>
+    <div class="card">Mon: Web Dev @ 10AM</div>
+    <div class="card">Tue: Data Science @ 2PM</div>
+    <div class="card">Wed: UX Design @ 9AM</div>
+</div>
+
+<div class="section">
+    <h3>🧠 Mood Check-In</h3>
+    <form method="POST" action="/submit-mood/">
+        {% csrf_token %}
+        <select name="mood">
+            <option>😊 Happy</option>
+            <option>😐 Okay</option>
+            <option>😞 Stressed</option>
+            <option>😴 Tired</option>
+        </select>
+        <button class="btn">Submit Mood</button>
+    </form>
+    <div class="card">
+        <h4>Last Moods:</h4>
+        {% for mood in moods %}
+            {{ mood.date|date:"D H:i" }} - {{ mood.mood }}<br>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="section">
+    <h3>📢 Announcements from Lecturers</h3>
+    {% for announcement in announcements %}
+        <div class="card">📌 {{ announcement.content }} <br><small>{{ announcement.date }}</small></div>
+    {% endfor %}
+</div>
+
+<div class="section">
+    <h3>📅 Assignment Tracker</h3>
+    <ul>
+        {% for assignment in assignments %}
+            <li>{{ assignment.title }} (Due: {{ assignment.due_date }}) - Status: 
+                {% if assignment.completed %}Completed{% else %}Pending{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/assignment-tracker/" class="link-btn">View Full Assignment Tracker</a>
+</div>
+{% endblock %}
